@@ -1,17 +1,13 @@
 from selenium import webdriver
-
 import time 
 import os
-
 import re
 from os import listdir
 from os.path import isfile, join
 from isis import date, date_end, date_start, pathfile, driver , homepath, accountWise, kara, wisetraffic, trafficStat
 
-#creer une variable pour declencher le driver 
-
 def nono():
-####suppression fichiers datewise  traffic, ewpmom et seamless
+
     file_oldname = os.path.join(pathfile , "dateWiseReport.xls")
     if os.path.exists(file_oldname):
         os.remove(file_oldname)
@@ -45,16 +41,7 @@ def nono():
         driver.find_element_by_id('loginForm_Login').click()
     except:
         driver.quit()
-    #############################################################################################################################
-    ############################################################################################################################
-    ################################Accounts wise seamless and epwmom##########################################################################
-
-
-    #############################################################################################################################
-
-
-
-
+   
 
     #################################################################################################################################
     ##################################################################################################################################
