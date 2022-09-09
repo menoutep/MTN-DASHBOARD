@@ -4,10 +4,12 @@ import os
 import re
 from os import listdir
 from os.path import isfile, join
-from isis import date, date_end, date_start, pathfile, driver , homepath, accountWise, kara, wisetraffic, trafficStat
+from main_functions import date, pathfile, driver , homepath, accountWise, kara, wisetraffic, trafficStat
+
+#creer une variable pour declencher le driver 
 
 def nono():
-
+####suppression fichiers datewise  traffic, ewpmom et seamless
     file_oldname = os.path.join(pathfile , "dateWiseReport.xls")
     if os.path.exists(file_oldname):
         os.remove(file_oldname)
@@ -15,7 +17,7 @@ def nono():
         print("Impossible de supprimer le fichier dateWiseReport.xls car il n'existe pas")
 
 
-    ####suppression fichiers datewise  traffic, ewpmom et seamlessichiers account stattistics daily
+    ####suppression fichiers ewpmom et seamlessichiers account stattistics daily
     os.chdir(pathfile)
     fichiers = [f for f in listdir(pathfile) if isfile(join(pathfile, f))]
     for fichier in fichiers:
@@ -25,11 +27,24 @@ def nono():
             os.remove(fichier)
     os.chdir(homepath)
     print("Suppression des fichiers account statistic effectuée") 
-
+    
+    
+   ####suppression fichiers  p2p,p2a,a2p daily ##################
+    os.chdir(pathfile)
+    fichiers = [f for f in listdir(pathfile) if isfile(join(pathfile, f))]
+    for fichier in fichiers:
+        x=re.search("^_daily_.", fichier) 
+        if x:
+            print(fichier)
+            os.remove(fichier)
+    os.chdir(homepath)
+    print("Suppression des fichiers account statistic effectuée") 
+    ################################""
     driver.maximize_window()
     ###############################################Login au GUI#############################################################################
     driver.find_element_by_id('details-button').click()
-    driver.find_element_by_id('proceed-link').click()
+    driver.find_element_by_id('proceed-link').click()       
+            
     driver.find_element_by_id('relogin').click()
     driver.find_element_by_name("loginModel.UserName").send_keys("ALLIMAN")
     driver.find_element_by_name("loginModel.UserName").send_keys('\ue004')
@@ -41,39 +56,50 @@ def nono():
         driver.find_element_by_id('loginForm_Login').click()
     except:
         driver.quit()
-   
+    #############################################################################################################################
+    ############################################################################################################################
+    ################################Accounts wise seamless and epwmom##########################################################################
+
+
+    #############################################################################################################################
+
+
+
+
 
     #################################################################################################################################
     ##################################################################################################################################
     ####################Gestion Trafic statistics P2P  A2P  P2A  #####################################################################
-    file__ = os.path.join(pathfile , "P2PTrafficStatistics"+date+".xls")
+ 
+    
+    file__ = os.path.join(pathfile , "p2pTrafficStatistics"+date+".xls")
     if os.path.exists(file__):
-        print("Le fichier "+"P2PTrafficStatistics"+date+".xls existe deja")
+        print("Le fichier "+"p2pTrafficStatistics"+date+".xls existe deja")
     else:
         try:
-            trafficStat("P2P")
+            trafficStat("p2p")
         except:
             driver.quit()
             
     time.sleep(3)
 
-    file__ = os.path.join(pathfile , "P2ATrafficStatistics"+date+".xls")
+    file__ = os.path.join(pathfile , "p2aTrafficStatistics"+date+".xls")
     if os.path.exists(file__):
-        print("Le fichier "+"P2ATrafficStatistics"+date+".xls existe deja")
+        print("Le fichier "+"p2aTrafficStatistics"+date+".xls existe deja")
     else:
         try:
-            trafficStat("P2A")
+            trafficStat("p2a")
         except:
             driver.quit()
             
     time.sleep(3)
 
-    file__ = os.path.join(pathfile , "A2PTrafficStatistics"+date+".xls")
+    file__ = os.path.join(pathfile , "a2pTrafficStatistics"+date+".xls")
     if os.path.exists(file__):
-        print("Le fichier "+"A2PTrafficStatistics"+date+".xls existe deja")
+        print("Le fichier "+"a2pTrafficStatistics"+date+".xls existe deja")
     else:
         try:
-            trafficStat("A2P")
+            trafficStat("a2p")
         except:
             driver.quit()
             
@@ -126,7 +152,6 @@ def nono():
 
     ##################################################################################################################################
     ####################telechargement fichier Trafic MoMo et seamless si n'existent pas puis renommage  #####################################################################
-
     file_mom_traffic = os.path.join(pathfile , "ewpmomTraffic"+date+".xls")
     if os.path.exists(file_mom_traffic):
         print("Le fichier "+"ewpmomTraffic"+date+".xls existe deja")
@@ -137,7 +162,8 @@ def nono():
         except:
             driver.quit()
             
-    time.sleep(5)
+    time.sleep(5)  
+
     file_seam_traffic = os.path.join(pathfile , "seamlessTraffic"+date+".xls")
     if os.path.exists(file_seam_traffic):
         print("Le fichier "+"seamlessTraffic"+date+".xls existe deja")
