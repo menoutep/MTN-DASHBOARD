@@ -16,6 +16,7 @@ yesterday = today - timedelta(days = 1)
 #date = time.strftime('%Y-%m-%d')
 date = yesterday
 date=str(date)
+
 date_start = date[0:8]+"01 00"
 jour = date[8:10]
 
@@ -49,6 +50,7 @@ driver.get("https://10.18.63.135:9090/im/getDashBoardData")
 
 
 def accountWise(service):
+   
     driver.find_element_by_link_text('Reports').click()
     time.sleep(5)
     #driver.find_element_by_link_text('Date Wise Report').click()
@@ -81,7 +83,15 @@ def accountWise(service):
     elif service == "seamless":
         action__.move_to_element(driver.find_element_by_xpath("//*[@id='esmeAccounts']/option[@value='783']"))
         action__.click()
-        action__.perform()       
+        action__.perform()      
+    elif service == "WAVECI":
+        action__.move_to_element(driver.find_element_by_xpath("//*[@id='esmeAccounts']/option[@value='2984']"))
+        action__.click()
+        action__.perform()  
+    elif service == "WAVECI2":
+        action__.move_to_element(driver.find_element_by_xpath("//*[@id='esmeAccounts']/option[@value='3354']"))
+        action__.click()
+        action__.perform()   
     #for i in range(250):
         #box.send_keys('\ue015')
     #driver.find_element_by_xpath("//*[@id='esmeAccounts']/option[20]").click()
@@ -102,7 +112,6 @@ def accountWise(service):
     for fichier in fichiers:
         x=re.search("^dateWiseReport.", fichier) 
         if x:
-            print(fichier)
             file_newname_newfile = os.path.join(pathfile, service+"Wise"+date+".xls")
             file_oldname= os.path.join(pathfile, fichier)
             os.rename(file_oldname, file_newname_newfile)
@@ -110,7 +119,99 @@ def accountWise(service):
     return 0
 
 
+def ussd():
+   
+    driver.find_element_by_link_text('Reports').click()
+    time.sleep(3)
+    driver.find_element_by_link_text('Success Failure Rate per Service').click()
+    time.sleep(5)
+    container_frame = driver.find_element_by_xpath("//iframe")
+    driver.switch_to.frame(container_frame)
+    inp_start=driver.find_element_by_xpath("//*[@id='Fromdate']")
+    date_= date + " 00:00:01"
+    date__= date + " 23:59:59"
+    inp_start.send_keys(date_)
+    keyboard.press_and_release('tab')
+    inp_end=driver.find_element_by_xpath("//*[@id='Todate']")
+    inp_end.send_keys(date__)
+    submit = driver.find_element_by_xpath('//*[@id="paramsForm"]/table/tbody/tr/td/table/tbody/tr[6]/td/table[2]/tbody/tr/th[2]/div/input')
+    submit.click()
+    time.sleep(5)
+    driver.switch_to.default_content()
+    container_frame = driver.find_element_by_xpath("//iframe")
+    driver.switch_to.frame(container_frame)
+    select=driver.find_element_by_xpath("//*[@id='fileFormatList']/select")
+    select.click()
+    driver.find_element_by_xpath("//*[@id='fileFormatList']/select/option[3]").click()
+    driver.find_element_by_id("item2").click()
+    driver.switch_to.default_content()
+    time.sleep(3)
+    
+    homepage=driver.find_element_by_xpath("//*[@id='header']/div[1]/a")    
+    homepage.click()
+    time.sleep(5)
+    os.chdir(pathfile)
+    fichiers = [f for f in listdir(pathfile) if isfile(join(pathfile, f))]
+    for fichier in fichiers:
+        x=re.search("^SuccessFailure Rate per Service_.", fichier) 
+        if x:
+            file_newname_newfile = os.path.join(pathfile,"ussdqos"+date+".xls")
+            file_oldname= os.path.join(pathfile, fichier)
+            os.rename(file_oldname, file_newname_newfile)
+    os.chdir(homepath)
+
+    return 0
+def tps(service):
+
+    driver.find_element_by_link_text('Reports').click()
+    time.sleep(3)
+    driver.find_element_by_link_text('Channel-Wise TPS Report').click()
+    time.sleep(3)
+    container_frame = driver.find_element_by_xpath("//iframe")
+    driver.switch_to.frame(container_frame)
+    time.sleep(2)
+    driver.find_element_by_xpath('//*[@id="paramContents"]/tbody/tr/th/div/table/tbody/tr[1]/td[2]/div/select').click()
+    time.sleep(1)
+    if service == "ussd":
+        driver.find_element_by_xpath('//*[@id="paramContents"]/tbody/tr/th/div/table/tbody/tr[1]/td[2]/div/select/option[5]').click()
+    elif service == "sms":
+        driver.find_element_by_xpath('//*[@id="paramContents"]/tbody/tr/th/div/table/tbody/tr[1]/td[2]/div/select/option[4]').click()
+    elif service == "im":
+        driver.find_element_by_xpath('//*[@id="paramContents"]/tbody/tr/th/div/table/tbody/tr[1]/td[2]/div/select/option[2]').click()
+    date_=date[0:8]+"01"
+    inp_start = driver.find_element_by_id("FromDate")
+    inp_start.send_keys(date_) 
+    inp_end = driver.find_element_by_id("ToDate")
+    inp_end.send_keys(date)
+    driver.find_element_by_xpath('//*[@id="paramsForm"]/table/tbody/tr/td/table/tbody/tr[6]/td/table[2]/tbody/tr/th[2]/div/input').click()
+    time.sleep(3)
+    driver.switch_to.default_content()
+    container_frame = driver.find_element_by_xpath("//iframe")
+    driver.switch_to.frame(container_frame)
+    time.sleep(2)
+    driver.find_element_by_xpath('//*[@id="fileFormatList"]/select').click()
+    driver.find_element_by_xpath('//*[@id="fileFormatList"]/select/option[3]').click()
+    time.sleep(1)
+    driver.find_element_by_xpath('//*[@id="item2"]').click()
+    time.sleep(4)
+    driver.switch_to.default_content()
+    time.sleep(1)
+    homepage=driver.find_element_by_xpath("//*[@id='header']/div[1]/a")    
+    homepage.click()
+    os.chdir(pathfile)
+    fichiers = [f for f in listdir(pathfile) if isfile(join(pathfile, f))]
+    for fichier in fichiers:
+        x=re.search("^tps_.", fichier) 
+        if x:
+            file_newname_newfile = os.path.join(pathfile,"tps"+service+date+".xls")
+            file_oldname= os.path.join(pathfile, fichier)
+            os.rename(file_oldname, file_newname_newfile)
+    os.chdir(homepath)    
+    return 0
+
+
 def wisetraffic():
+    
     driver.find_element_by_link_text('Reports').click()
     time.sleep(3)
     driver.find_element_by_link_text('Date Wise Report').click()
@@ -174,7 +275,8 @@ def kara(service):
     container_frame = driver.find_element_by_xpath("//iframe")
     driver.switch_to.frame(container_frame)
     input_date_1 = driver.find_element_by_id("fromDate")
-    input_date_1.send_keys(date)
+    date_=date[0:8]+"01"
+    input_date_1.send_keys(date_)
 
     input_date_2 = driver.find_element_by_id("toDate")
     input_date_2.send_keys(date)
@@ -210,13 +312,20 @@ def kara(service):
     time.sleep(5)
     container_frame = driver.find_element_by_xpath("//iframe")
     driver.switch_to.frame(container_frame)
-    time.sleep(5)
+    time.sleep(5) 
+    v_moiss=int(v_mois)
+    v_moiss=v_moiss-1
+    v_moiss=str(v_moiss)
+    if service =="WAVECI":
+        v_moiss=v_mois   
+#//*[@id="__bookmark_3"]/tbody/tr[8]/td[1]/div/a
     driver.find_element_by_xpath("//*[@id='__bookmark_3']/tbody/tr["+v_moiss+"]/td[1]/div/a").click()
     #//*[@id="__bookmark_3"]/tbody/tr[7]/td[1]/div/a
     #//*[@id="__bookmark_3"]/tbody/tr[8]/td[1]/div/a
     #//*[@id="__bookmark_3"]/tbody/tr[8]/td[1]/div/a
     #//*[@id="__bookmark_2"]/tbody/tr[8]/td[2]/div/a
     #//*[@id="__bookmark_2"]/tbody/tr[8]/td[2]/div/a
+    #//*[@id="__bookmark_3"]/tbody/tr[8]/td[1]/div/a
     driver.switch_to.default_content()
     time.sleep(5)	
 																																							
@@ -247,9 +356,10 @@ def kara(service):
     
        
 def trafficStat(service):
-    
+
     if service == "p2p":
         path = "//*[@id='__bookmark_2']/tbody/tr["+v_mois+"]/td[2]/div/a"
+       
     elif service == "a2p":
         path = "//*[@id='__bookmark_2']/tbody/tr["+v_mois+"]/td[3]/div/a"
     elif service == "p2a":
@@ -284,10 +394,14 @@ def trafficStat(service):
 #selection du mois pour le P2P
     time.sleep(3)
     driver.switch_to.default_content()
-    for i in range(2):
-        keyboard.press_and_release('tab')
-    keyboard.press_and_release('enter')
+    driver.switch_to.frame(container_frame)
+    driver.find_element_by_xpath('//*[@id="__bookmark_2"]/tbody/tr[2]/td[1]/div/a').click()
+    driver.switch_to.default_content()
+    #for i in range(2):
+        #keyboard.press_and_release('tab')
+    #keyboard.press_and_release('enter')
 #//*[@id="__bookmark_2"]/tbody/tr[2]/td[1]/div/a
+#//*[@id="__bookmark_2"]/tbody/tr[3]/td[2]
 #//*[@id="__bookmark_2"]/tbody/tr[2]/td[1]/div/a
 
 #retour à la page principale puis accès au iframe pour selectionner format fichier et export

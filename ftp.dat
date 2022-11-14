@@ -1,0 +1,45 @@
+open 10.2.6.120
+
+user alliman alliman
+
+prompt
+
+lcd "D:\ZABRE\Downloads"
+
+cd /home/alliman2
+
+get statscloud_2022-10-11_drapp1
+
+get statscloud_2022-10-11_drapp2
+
+get statscloud_2022-10-11_drapp3
+
+get statscloud_2022-10-11_drapp4
+
+get statscloud_2022-10-11_drapp5
+
+ 
+
+cd /script/reports
+
+get sms_sucess.20221011.csv smsc_del_sucess.20221011.csv
+
+ 
+
+Pour evd
+
+cd /script/seamless_reports
+
+get sms_sucess.20221011.csv evd_del_sucess.20221011.csv
+
+ 
+
+Pour momo
+
+cd /script/ewp_reports
+
+get sms_sucess.20221011.csv momo_del_sucess.20221011.csv  
+
+quit
+
+ 

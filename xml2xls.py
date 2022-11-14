@@ -18,7 +18,7 @@ def convertxml(file_input,file_output):
     sheet = wb.add_sheet('feuille1')
     wb.save(file_output)
     wb=open_workbook(file_output)
-    print(wb)
+    
     wb_=copy(wb)
     sheet=wb_.get_sheet(0)
     i=0
@@ -52,6 +52,7 @@ a2pTrafficStatistics="a2pTrafficStatistics"+date+".xls"
 p2aTrafficStatistics="p2pTrafficStatistics"+date+".xls"
 ewpmomTraffic="ewpmomTraffic"+date+".xls"
 seamlessTraffic="seamlessTraffic"+date+".xls"
+
 ewpmomWise = "ewpmomWise"+date+".xls"
 
 try: 
@@ -72,3 +73,18 @@ try:
     trafficWise=convertxml(trafficWise,trafficWise)
 except:
     print("quelque chose c'est mal passé au moment de convertir le trafficWiseWise en xls")
+
+WAVECIWise = "WAVECIWise"+date+".xls"
+
+try: 
+    WAVECIWise=convertxml(WAVECIWise,WAVECIWise)
+except:
+    print("quelque chose c'est mal passé au moment de convertir le WAVECIWise en xls")
+
+WAVECI2Wise="WAVECI2Wise"+date+".xls" 
+ 
+try: 
+    WAVECI2Wise=convertxml(WAVECI2Wise,WAVECI2Wise)
+except:
+    print("quelque chose c'est mal passé au moment de convertir le WAVECI2Wise en xls")
+ 
